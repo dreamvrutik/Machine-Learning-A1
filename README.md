@@ -9,4 +9,9 @@
     To run and get all plots and accuracy : 
       --> python fischer.py a1_d1.csv
       --> python fischer.py a1_d2.csv
+  # Naive Bayes with 5-fold Cross Validation
+    -->pip install nltk
+    Run command 'python -m nltk.downloader all' to get all text files of nltk
+    Run main_code.py to get the output
     
+  
