@@ -4,7 +4,7 @@ from string import punctuation
 from nltk.corpus import stopwords
 import pandas as pd
 import numpy as np
-
+import math
 class Process(object):
     """docstring for Process."""
     dataframe = pd.read_csv("New_data.csv")
@@ -166,3 +166,6 @@ if __name__ == '__main__':
     pro.k_fold_cross(Ftrain4,pro.train4)
     pro.k_fold_cross(Ftrain5,pro.train5)
     print(pro.accu)
+    acc = np.array(pro.accu)
+    # std = math.sqrt(mean(abs(x - x.mean())**2))
+    print(np.mean(acc),"+-",np.std(acc))
