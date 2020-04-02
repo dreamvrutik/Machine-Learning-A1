@@ -19,9 +19,9 @@ def get_data(filename):
     return data
 
 class Fischer:
-    def __init__(self,data):
+    def __init__(self,data,num_dim):
         self.data=data
-        self.num_dim=1
+        self.num_dim=num_dim
         self.columnlabel=len(self.data[0])-1
         self.dim=self.columnlabel
         random.shuffle(self.data)
@@ -194,7 +194,7 @@ class Fischer:
 
 if __name__=='__main__':
     data=get_data(sys.argv[1])
-    LDA=Fischer(data)
+    LDA=Fischer(data,1)
     print("Threshhold after transformation = ",LDA.threshhold)
     print("Accuracy = ",LDA.accuracy)
     print("F1-Score = ",LDA.f_score)
