@@ -141,8 +141,6 @@ class Fischer:
                 fp+=1
             else:
                 tn+=1
-        self.precision=float(tp)/float(tp+fp)
-        self.recall=float(tp)/float(tp+fn)
         self.f_score=float(2*self.precision*self.recall)/float(self.precision+self.recall)
         self.accuracy=float(tp+tn)/float(tp+tn+fp+fn)
 
