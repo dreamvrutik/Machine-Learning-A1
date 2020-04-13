@@ -31,7 +31,7 @@ class Process(object):
         fp=0
         fn=0
         for i in range(len(pred)):
-            print(pred[i],test[i][1])
+            # print(pred[i],test[i][1])
             if pred[i]==1 and test[i][1]==1:
                 tp+=1
             if pred[i]==1 and test[i][1]==0:
@@ -56,7 +56,7 @@ class Process(object):
                     continue
                 else :
                     vocab[j]=1
-        print(len(vocab))
+        # print(len(vocab))
         for i in range(len(train)):
             if train[i][1]==1:
                 words_in_cl1 += len(train[i][0])
@@ -64,8 +64,8 @@ class Process(object):
                 words_in_cl0 += len(train[i][0])
         dict1 = {}
         dict0 = {}
-        print(words_in_cl0)
-        print(words_in_cl1)
+        # print(words_in_cl0)
+        # print(words_in_cl1)
         for i in range(len(train)):
             for j in train[i][0]:
                 if train[i][1]==1:
@@ -131,15 +131,15 @@ class Process(object):
                 pred1.append(1)
         aa=0
         aa1=0
-        print(cnt,cnt1)
+        # print(cnt,cnt1)
         for i in range(len(pred)):
             if int(pred[i])==test[i][1]:
                 aa+=1
         for i in range(len(pred1)):
             if int(pred1[i])==test[i][1]:
                 aa1+=1
-        self.accu.append(aa/200)
-        self.cal_fscore(pred,test)
+        self.accu.append(aa1/200)
+        self.cal_fscore(pred1,test)
         return
 
 if __name__ == '__main__':
@@ -160,7 +160,7 @@ if __name__ == '__main__':
     pro.k_fold_cross(Ftrain3,pro.train3)
     pro.k_fold_cross(Ftrain4,pro.train4)
     pro.k_fold_cross(Ftrain5,pro.train5)
-    print(pro.accu,np.array(pro.accu).mean(),"+-",np.array(pro.accu).std())
-    print(pro.f_score,np.array(pro.f_score).mean(),"+-",np.array(pro.f_score).std())
-    print(pro.recal,np.array(pro.recal).mean(),"+-",np.array(pro.recal).std())
-    print(pro.precision_o,np.array(pro.precision_o).mean(),"+-",np.array(pro.precision_o).std())
+    print("Accuracy : ",pro.accu,np.array(pro.accu).mean(),"+-",np.array(pro.accu).std())
+    print("F-score : ",pro.f_score,np.array(pro.f_score).mean(),"+-",np.array(pro.f_score).std())
+    print("Recoil : ",pro.recal,np.array(pro.recal).mean(),"+-",np.array(pro.recal).std())
+    print("Precision : ",pro.precision_o,np.array(pro.precision_o).mean(),"+-",np.array(pro.precision_o).std())
