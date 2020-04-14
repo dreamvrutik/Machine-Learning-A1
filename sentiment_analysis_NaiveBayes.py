@@ -2,36 +2,70 @@ import pandas as pd
 import numpy as np
 import math
 class Process(object):
-    """docstring for Process."""
-    dataframe = pd.read_csv("New_data.csv")
-    finaldata=[]
-    train1 = []
-    train2=[]
-    train3=[]
-    train4=[]
-    train5=[]
-    accu=[]
-    f_score=[]
-    recal=[]
-    precision_o=[]
+    '''
+    Class implementing Naive Bayes from scratch
+    It takes data as a csv input , divides the data to 5 random sets and uses
+    5-fold cross validation to perform Sentiment Analysis
+    '''
+    def __init__(self):
+        '''
+        dataframe = stores data where 1 column is text, and 2 column is corresponding label
+        finaldata = stores the data of dataframe after processing it, removing punctuations, stopwords etc..
+        train1,2,3,4,5 = data of finaldata divided into five parts
+        accu = accuracy of model
+        f_score = F score of model
+        recal  Recoil of model
+        precision_o = Precision of model
+        '''
+        self.dataframe = pd.read_csv("New_data.csv")
+        self.finaldata=[]
+        self.train1 = []
+        self.train2=[]
+        self.train3=[]
+        self.train4=[]
+        self.train5=[]
+        self.accu=[]
+        self.f_score=[]
+        self.recal=[]
+        self.precision_o=[]
+
     def processTweets(self):
+        '''
+        processTweets converts the input data stored in dataframe ,by removing punctutations, numbers , and tokenizing it ,
+        finally storing it in Final Data
+        '''
         newt = []
         for i in range(len(self.dataframe)):
-            self.finaldata.append([self.processT2(self.dataframe.iloc[i,0].lower().replace(",", "").replace(".", "").replace("!", "").replace("?", "")
+            self.finaldata.append([self.dataframe.iloc[i,0].lower().replace(",", "").replace(".", "").replace("!", "").replace("?", "")
            .replace(";", "").replace(":", "").replace("*", "").replace("\"","")
            .replace("(", "").replace(")", "").replace("-","").replace("_","")
-           .replace("/", "").replace("$","").replace("#","").replace("0","").replace("2","").replace("1","").replace("3","").replace("4","").replace("5","").replace("6","").replace("7","").replace("8","").replace("9","")),int(self.dataframe.iloc[i,1])])
+           .replace("/", "").replace("$","").replace("#","").replace("0","")
+           .replace("2","").replace("1","").replace("3","").replace("4","")
+           .replace("5","").replace("6","").replace("7","").replace("8","")
+           .replace("9","").split(),int(self.dataframe.iloc[i,1])])
+        '''
+        Randomly shuffling final data so remove clusters of single label if present
+        '''
         np.random.shuffle(self.finaldata)
-    def processT2(self,sentence):
-        n_sentence = sentence.split()
-        return n_sentence # accuracy 81%
+
+
+
     def cal_fscore(self,pred,test):
+        '''
+        Function calculates F score of current Fold and stores it in f_score
+        tp = True Positve ( when predicted and actual both are 1 )
+        tn = True Negative ( when predicted and actual both are 0)
+        fp = false positive (when predicted is 1 but actual is 0)
+        fn = false negative (when predicted is 0 and actual is 1)
+        precision calculates Precision of this fold and stores it int precision_o
+        same goes for f_score and recal
+        '''
+
         tp=0
         tn=0
         fp=0
         fn=0
         for i in range(len(pred)):
-            # print(pred[i],test[i][1])
             if pred[i]==1 and test[i][1]==1:
                 tp+=1
             if pred[i]==1 and test[i][1]==0:
@@ -46,7 +80,15 @@ class Process(object):
         self.f_score.append(fscore)
         self.recal.append(recall)
         self.precision_o.append(precision)
+
+
     def k_fold_cross(self,train,test):
+        '''
+        Model that performs k-fold cross  validation,where k here is 5
+        Probalitiy is calculated using two ways , bayes theorem and applyinh log to bayes theorem,
+        In both cases results were similar
+
+        '''
         words_in_cl0=0
         words_in_cl1=0
         vocab = {}
@@ -64,8 +106,6 @@ class Process(object):
                 words_in_cl0 += len(train[i][0])
         dict1 = {}
         dict0 = {}
-        # print(words_in_cl0)
-        # print(words_in_cl1)
         for i in range(len(train)):
             for j in train[i][0]:
                 if train[i][1]==1:
