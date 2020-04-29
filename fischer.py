@@ -20,6 +20,10 @@ def get_data(filename):
 
 class Fischer:
     def __init__(self,data,num_dim):
+        '''
+        Getting the data from csv file and number of dimensions that the data
+        is to be reduces to.
+        '''
         self.data=data
         self.num_dim=num_dim
         self.columnlabel=len(self.data[0])-1
@@ -40,6 +44,10 @@ class Fischer:
 
 
     def group_data_by_classes(self):
+        '''
+        The data is grouped by classes ie target value of each column
+        and also number of classes is stored
+        '''
         self.grouped_data={}
         for i in self.training_data:
             if i[self.columnlabel] in self.grouped_data:
@@ -49,6 +57,9 @@ class Fischer:
         self.num_of_classes=len(self.grouped_data)
 
     def calculate_means(self):
+        '''
+        This calculates mean of data classwise and overall mean.
+        '''
         self.class_mean={}
         self.overall_mean=np.array([0. for x in range(self.dim)])
         for i in self.grouped_data:
@@ -64,6 +75,10 @@ class Fischer:
             self.overall_mean[i]/=len(self.training_data)
 
     def calculate_SB_SW(self):
+        '''
+        This calculates SB and SW matrices by formula specified in the report
+        and return the matrices which are used for data transformation
+        '''
         self.SB=np.zeros((self.dim,self.dim))
         for i in self.class_mean:
             mk_minus_m=np.array([self.class_mean[i]-self.overall_mean])
@@ -82,6 +97,11 @@ class Fischer:
                 self.SW+=xnk_minus_mk_t.dot(xnk_minus_mk)
 
     def calculate_eigen_values(self):
+        '''
+        This calculates eigenvalues and eigenvectors of the data and number of dimensions
+        that data is to be reduced to and calculates vector w that is used for transforming data
+        points.
+        '''
         mat = np.dot(np.linalg.pinv(self.SW),self.SB)
         eigvals, eigvecs = np.linalg.eig(mat)
         eiglist = [(eigvals[i], eigvecs[:, i]) for i in range(len(eigvals))]
@@ -90,6 +110,10 @@ class Fischer:
         self.w=w
 
     def transform_data(self):
+        '''
+        This function transforms data to required number of dimensions and calculates threshold
+        using gaussian normal equation by calculating mean and std deviation of all classes.
+        '''
         self.transformed_grouped_data={}
         for i in self.grouped_data:
             if i not in self.transformed_grouped_data:
@@ -123,6 +147,13 @@ class Fischer:
             self.class_less_than_threshhold=1
 
     def test_algorithm(self):
+        '''
+        This tests the algorithm by calculating acuracy and f-score usin confusion matrix.
+        precision = TP / (TP + FP)
+        recall = TP / (TP + FN)
+        F-Score = (2 * precision * recall) / (precision + recall)
+        accuracy = (TP + TN) / (TP + TN + FP + FN)
+        '''
         tp=0
         fp=0
         tn=0
@@ -149,6 +180,9 @@ class Fischer:
         self.accuracy=float(tp+tn)/float(tp+tn+fp+fn)
 
     def plot_normal_graph(self):
+        '''
+        Plots normal distribution curve of the data.
+        '''
         x_min = -5.0
         x_max = 5.0
 
@@ -173,6 +207,9 @@ class Fischer:
         plt.show()
 
     def plot_transformed_data(self):
+        '''
+        Plots the transformed data on the graph
+        '''
         y0=[]
         y1=[]
         x0=[]
