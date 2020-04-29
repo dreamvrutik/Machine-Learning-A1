@@ -25,8 +25,10 @@ class Fischer:
         self.columnlabel=len(self.data[0])-1
         self.dim=self.columnlabel
         random.shuffle(self.data)
-        self.training_data=self.data[:int(len(self.data)*0.7)]
-        self.testing_data=self.data[int(len(self.data)*0.7):]
+        self.training_data=self.data
+        self.testing_data=self.data
+        # self.training_data=self.data[:int(len(self.data)*0.7)]
+        # self.testing_data=self.data[int(len(self.data)*0.7):]
         self.group_data_by_classes()
         self.calculate_means()
         self.calculate_SB_SW()
@@ -141,6 +143,8 @@ class Fischer:
                 fp+=1
             else:
                 tn+=1
+        self.precision=tp/(tp+fp)
+        self.recall=tp/(tp+fn)
         self.f_score=float(2*self.precision*self.recall)/float(self.precision+self.recall)
         self.accuracy=float(tp+tn)/float(tp+tn+fp+fn)
 
